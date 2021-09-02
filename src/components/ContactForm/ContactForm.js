@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 import s from './ContactForm.module.css';
@@ -6,64 +6,124 @@ import Input from '../Input';
 import Label from '../Label';
 import options from '../options';
 
-class ContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
-  };
-  nameInputId = uuidv4();
-  numberInputId = uuidv4();
+export default function ContactForm({ onSubmit }) {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
-  handleChange = event => {
-    const { name, value } = event.currentTarget;
-    this.setState({
-      [name]: value,
-    });
+  const nameInputId = uuidv4();
+  const numberInputId = uuidv4();
+
+  const handleChange = event => {
+    const { name, value } = event.target;
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+      case 'number':
+        setNumber(value);
+        break;
+      default:
+        return;
+    }
   };
 
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    this.props.onSubmit(this.state);
-    this.reset();
+    onSubmit(name, number);
+    reset();
   };
 
-  reset = () => {
-    this.setState({
-      name: '',
-      number: '',
-    });
+  const reset = () => {
+    setName('');
+    setNumber('');
   };
 
-  render() {
-    const { name, number } = this.state;
-
-    return (
-      <form className={s.form} onSubmit={this.handleSubmit}>
-        <Label id={this.nameInputId} title="Name">
-          <Input
-            id={this.nameInputId}
-            type="text"
-            name="name"
-            value={name}
-            handleChange={this.handleChange}
-            options={options.name}
-          />
-        </Label>
-        <Label id={this.numberInputId} title="Number">
-          <Input
-            id={this.numberInputId}
-            type="tel"
-            name="number"
-            value={number}
-            handleChange={this.handleChange}
-            options={options.number}
-          />
-        </Label>
-        <button className={s.button} type="submit">
-          add Contact
-        </button>
-      </form>
-    );
-  }
+  return (
+    <form className={s.form} onSubmit={handleSubmit} autoComplete="off">
+      <Label id={nameInputId} title="Name">
+        <Input
+          id={nameInputId}
+          type="text"
+          name="name"
+          value={name}
+          handleChange={handleChange}
+          options={options.name}
+        />
+      </Label>
+      <Label id={numberInputId} title="Number">
+        <Input
+          id={numberInputId}
+          type="tel"
+          name="number"
+          value={number}
+          handleChange={handleChange}
+          options={options.number}
+        />
+      </Label>
+      <button className={s.button} type="submit">
+        add Contact
+      </button>
+    </form>
+  );
 }
-export default ContactForm;
+
+// class OldContactForm extends Component {
+//   state = {
+//     name: '',
+//     number: '',
+//   };
+//   nameInputId = uuidv4();
+//   numberInputId = uuidv4();
+
+//   handleChange = event => {
+//     const { name, value } = event.currentTarget;
+//     this.setState({
+//       [name]: value,
+//     });
+//   };
+
+//   handleSubmit = event => {
+//     event.preventDefault();
+//     this.props.onSubmit(this.state);
+//     this.reset();
+//   };
+
+//   reset = () => {
+//     this.setState({
+//       name: '',
+//       number: '',
+//     });
+//   };
+
+//   render() {
+//     const { name, number } = this.state;
+
+//     return (
+//       <form className={s.form} onSubmit={this.handleSubmit}>
+//         <Label id={this.nameInputId} title="Name">
+//           <Input
+//             id={this.nameInputId}
+//             type="text"
+//             name="name"
+//             value={name}
+//             handleChange={this.handleChange}
+//             options={options.name}
+//           />
+//         </Label>
+//         <Label id={this.numberInputId} title="Number">
+//           <Input
+//             id={this.numberInputId}
+//             type="tel"
+//             name="number"
+//             value={number}
+//             handleChange={this.handleChange}
+//             options={options.number}
+//           />
+//         </Label>
+//         <button className={s.button} type="submit">
+//           add Contact
+//         </button>
+//       </form>
+//     );
+//   }
+// }
