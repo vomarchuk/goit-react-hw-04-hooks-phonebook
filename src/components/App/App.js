@@ -9,7 +9,7 @@ import Filter from '../Filter';
 
 export default function App() {
   const [contacts, setContacts] = useState(
-    JSON.parse(localStorage.getItem('Contacts')) ?? '',
+    () => JSON.parse(localStorage.getItem('Contacts')) ?? '',
   );
   const [filter, setFilter] = useState('');
   const checkName = newName => contacts.find(({ name }) => name === newName);
