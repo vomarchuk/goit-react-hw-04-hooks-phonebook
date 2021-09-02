@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import s from './App.module.css';
@@ -6,11 +6,10 @@ import Container from '../Container';
 import ContactForm from '../ContactForm';
 import ContactList from '../ContactList/';
 import Filter from '../Filter';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 export default function App() {
-  const [contacts, setContacts] = useState(
-    () => JSON.parse(localStorage.getItem('Contacts')) ?? '',
-  );
+  const [contacts, setContacts] = useLocalStorage('Contacts', '');
   const [filter, setFilter] = useState('');
   const checkName = newName => contacts.find(({ name }) => name === newName);
   const addContact = (name, number) => {
@@ -40,10 +39,6 @@ export default function App() {
       contact.name.toLowerCase().includes(normalizedFilter),
     );
   };
-
-  useEffect(() => {
-    localStorage.setItem('Contacts', JSON.stringify(contacts));
-  }, [contacts]);
 
   return (
     <>
